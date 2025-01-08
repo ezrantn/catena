@@ -12,8 +12,8 @@ go get github.com/ezrantn/catena
 
 ```go
 type User struct {
-	Name  string `json:"name"`
-	Email string `json:"email"`
+ Name  string `json:"name"`
+ Email string `json:"email"`
 }
 
 func main() {
@@ -24,7 +24,7 @@ func main() {
     serializer := NewSerializer(1024 * 1024) // 1 MB memory
     _, err := serializer.SerializeToJSON(user)
 }
-``` 
+```
 
 ## Benchmark
 
