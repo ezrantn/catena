@@ -1,10 +1,13 @@
 package catena
 
-import "fmt"
+import (
+	"sync"
+)
 
 type Arena struct {
-	memory   []byte // Arena memory chunk
-	position int    // Current position in arena
+	memory   []byte     // Arena memory chunk
+	position int        // Current position in arena
+	mu       sync.Mutex // For thread-safety
 }
 
 func NewArena(size int) *Arena {
@@ -14,11 +17,22 @@ func NewArena(size int) *Arena {
 	}
 }
 
+// Resets the arena position to 0
+func (a *Arena) Reset() {
+	a.position = 0
+}
+
 // Allocates memory from the arena for serialized objects
 func (a *Arena) Allocate(size int) []byte {
+	a.mu.Lock()
+	defer a.mu.Unlock()
+
+	// Double the arena size if needed
 	if a.position+size > len(a.memory) {
-		fmt.Printf("Requested size: %d, Available space: %d\n", size, len(a.memory)-a.position)
-		panic("Arena memory exhausted")
+		newSize := max(len(a.memory)*2, a.position+size)
+		newMemory := make([]byte, newSize)
+		copy(newMemory, a.memory)
+		a.memory = newMemory
 	}
 
 	start := a.position

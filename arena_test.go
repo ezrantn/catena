@@ -40,30 +40,40 @@ func BenchmarkJSONDeserialization(b *testing.B) {
 	}
 }
 
-func BenchmarkCustomSerialization(b *testing.B) {
-	user := createTestUser()
-	arena := NewArena(1024 * 1024)
-	jsonSerializer := &JSONSerializer{}
-	for i := 0; i < b.N; i++ {
-		arena.position = 0
-		_, err := SerializeObject(jsonSerializer, user, arena)
-		if err != nil {
-			b.Fatalf("Custom serialization failed: %v", err)
-		}
+func BenchmarkCatenaJSONSerialization(b *testing.B) {
+	user := &User{
+		Name:  "Alice",
+		Email: "alice@example.com",
 	}
+	serializer := NewSerializer(1024 * 1024)
+
+	b.ResetTimer()
+	b.RunParallel(func(pb *testing.PB) {
+		for pb.Next() {
+			_, err := serializer.SerializeToJSON(user)
+			if err != nil {
+				b.Fatalf("JSON serialization failed: %v", err)
+			}
+		}
+	})
 }
 
-func BenchmarkCustomDeserialization(b *testing.B) {
-	user := createTestUser()
-	arena := NewArena(1024 * 1024)
-	jsonSerializer := &JSONSerializer{}
-	serializedData, _ := SerializeObject(jsonSerializer, user, arena)
-	b.ResetTimer() // Reset the timer to exclude setup time
-	for i := 0; i < b.N; i++ {
-		var deserializedUser User
-		err := DeserializeObject(jsonSerializer, serializedData, &deserializedUser)
-		if err != nil {
-			b.Fatalf("Custom deserialization failed: %v", err)
-		}
+func BenchmarkCatenaJSONDeserialization(b *testing.B) {
+	user := &User{
+		Name:  "Alice",
+		Email: "alice@example.com",
 	}
+	serializer := NewSerializer(1024 * 1024)
+	data, _ := serializer.SerializeToJSON(user)
+
+	b.ResetTimer()
+	b.RunParallel(func(pb *testing.PB) {
+		for pb.Next() {
+			var deserializedUser User
+			err := serializer.DeserializeFromJSON(data, &deserializedUser)
+			if err != nil {
+				b.Fatalf("JSON deserialization failed: %v", err)
+			}
+		}
+	})
 }
