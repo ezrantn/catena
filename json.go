@@ -6,18 +6,19 @@ import (
 
 func (s *Serializer) SerializeToJSON(obj any) ([]byte, error) {
 	buf := s.jsonPool.Get().([]byte)
-	buf = buf[:0]
+	defer s.jsonPool.Put(buf[:0])
 
 	data, err := json.Marshal(obj)
 	if err != nil {
-		s.jsonPool.Put(buf)
 		return nil, err
 	}
 
-	result := s.arena.Allocate(len(data))
-	copy(result, data)
+	result, ok := s.arena.Allocate(len(data))
+	if !ok {
+		return nil, err
+	}
 
-	s.jsonPool.Put(buf)
+	copy(result, data)
 	return result, nil
 }
 
