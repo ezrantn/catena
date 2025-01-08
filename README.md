@@ -10,60 +10,21 @@ go get github.com/ezrantn/catena
 
 ## Usage
 
-### **Arena**
-
-The core component of this library is the Arena, which is responsible for managing memory. An arena allocates a block of memory once, and then multiple objects can be serialized into that memory without requiring frequent allocations.
-
-```go
-package main
-
-import "github.com/ezrantn/catena"
-
-func main() {
-    // Create a new arena with 1MB of memory
-    arena := catena.NewArena(1024 * 1024)
-}
-```
-
-### **Serialize an Object**
-
-To serialize an object using a `JSONSerializer`:
-
 ```go
 type User struct {
-    Name  string `json:"name"`
-    Age   int    `json:"age"`
+	Name  string `json:"name"`
+	Email string `json:"email"`
 }
 
 func main() {
-    user := User{Name: "Alice", Age: 30}
-    arena := catena.NewArena(1024 * 1024)
-    jsonSerializer := &catena.JSONSerializer{}
-    
-    // Serialize the object
-    serializedData, err := jsonSerializer.Serialize(user, arena)
-    if err != nil {
-        panic(err)
+    user := &User{
+        Name: "John",
+        Email: "john@mail.com"
     }
-    
-    fmt.Println("Serialized Data:", string(serializedData))
+    serializer := NewSerializer(1024 * 1024) // 1 MB memory
+    _, err := serializer.SerializeToJSON(user)
 }
-```
-
-### **Deserialize an Object**
-
-To deserialize an object from the serialized data:
-
-```go
-// Deserialize the object
-var deserializedUser User
-err = jsonSerializer.Deserialize(serializedData, &deserializedUser)
-if err != nil {
-    panic(err)
-}
-    
-fmt.Println("Deserialized User:", deserializedUser)
-```
+``` 
 
 ## Benchmark
 

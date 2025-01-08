@@ -1,0 +1,30 @@
+name: catena
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up catena
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.23'
+
+      - name: Format
+        run: go fmt .
+
+      - name: Test
+        run: go test -v .
+
+      - name: Bench
+        run: go test -bench . -benchmem
+
+      - name: Code coverage
+        run: go test -coverprofile=catena.out

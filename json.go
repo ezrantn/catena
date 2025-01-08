@@ -1,6 +1,8 @@
 package catena
 
-import "encoding/json"
+import (
+	"encoding/json"
+)
 
 func (s *Serializer) SerializeToJSON(obj any) ([]byte, error) {
 	buf := s.jsonPool.Get().([]byte)

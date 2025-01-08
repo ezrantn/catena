@@ -1,13 +1,11 @@
 package catena
 
-import (
-	"sync"
-)
+import "sync"
 
 type Arena struct {
 	memory   []byte     // Arena memory chunk
 	position int        // Current position in arena
-	mu       sync.Mutex // For thread-safety
+	mu       sync.Mutex // Thread-safe operation
 }
 
 func NewArena(size int) *Arena {
@@ -15,11 +13,6 @@ func NewArena(size int) *Arena {
 		memory:   make([]byte, size),
 		position: 0,
 	}
-}
-
-// Resets the arena position to 0
-func (a *Arena) Reset() {
-	a.position = 0
 }
 
 // Allocates memory from the arena for serialized objects

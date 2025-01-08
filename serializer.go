@@ -8,8 +8,8 @@ type Serializer struct {
 	protoPool sync.Pool
 }
 
-func NewSerializer(arenaSize int) *Serializer {
-	return &Serializer{
+func NewSerializer(arenaSize int) Serializer {
+	return Serializer{
 		arena: NewArena(arenaSize),
 		jsonPool: sync.Pool{
 			New: func() any {
