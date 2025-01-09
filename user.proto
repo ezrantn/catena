@@ -1,0 +1,8 @@
+syntax = "proto3";
+
+option go_package = "/catena_proto";
+
+message ProtoUser {
+    string name = 1;
+    string email = 2;
+}
