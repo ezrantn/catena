@@ -96,7 +96,7 @@ func BenchmarkGoogleProtoSerialization(b *testing.B) {
 
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_, err := proto.Marshal(user)
+		_, err := proto.Marshal(user) // Google's Protobuf serialization
 		if err != nil {
 			b.Fatalf("Google Protobuf serialization failed: %v", err)
 		}
@@ -149,5 +149,97 @@ func BenchmarkCatenaProtoDeserialization(b *testing.B) {
 		if err != nil {
 			b.Fatalf("Proto deserialization failed: %v", err)
 		}
+	}
+}
+
+func TestArenaAllocate(t *testing.T) {
+	size := 1024
+	arena := NewArena(size)
+
+	// Allocate within available memory
+	data, ok := arena.Allocate(512)
+	if !ok || len(data) != 512 {
+		t.Fatalf("expected allocation of 512 bytes to succeed, got ok=%v, len(data)=%d", ok, len(data))
+	}
+
+	// Allocate exceeding available memory
+	data, ok = arena.Allocate(600)
+	if ok || data != nil {
+		t.Fatalf("expected allocation of 600 bytes to fail, got ok=%v, data=%v", ok, data)
+	}
+}
+
+func TestArenaReset(t *testing.T) {
+	size := 1024
+	arena := NewArena(size)
+
+	// Allocate some memory
+	_, ok := arena.Allocate(512)
+	if !ok {
+		t.Fatalf("allocation of 512 bytes failed")
+	}
+
+	// Reset the arena
+	arena.Reset()
+
+	// Allocate again, should reuse the memory
+	data, ok := arena.Allocate(1024)
+	if !ok || len(data) != 1024 {
+		t.Fatalf("expected allocation of 1024 bytes to succeed after reset, got ok=%v, len(data)=%d", ok, len(data))
+	}
+}
+
+func TestArenaManagerGetPut(t *testing.T) {
+	size := 1024
+	manager := NewArenaManager(size)
+
+	// Get an arena from the manager
+	arena := manager.Get()
+	if arena == nil {
+		t.Fatalf("expected arena to be non-nil")
+	}
+
+	// Allocate new memory
+	_, ok := arena.Allocate(512)
+	if !ok {
+		t.Fatalf("allocation of 512 bytes failed")
+	}
+
+	// Return the arena to the pool
+	manager.Put(arena)
+
+	// Get the arena again and ensure it's reset
+	arena = manager.Get()
+	data, ok := arena.Allocate(1024)
+	if !ok || len(data) != 1024 {
+		t.Fatalf("expected allocation of 1024 bytes to succeed after returning to pool, ok=%v, len(data)=%d", ok, len(data))
+	}
+}
+
+func TestArenaManagerMultipleArenas(t *testing.T) {
+	size := 1024
+	manager := NewArenaManager(size)
+
+	// Get multiple arenas from the manager
+	arena1 := manager.Get()
+	arena2 := manager.Get()
+
+	if arena1 == arena2 {
+		t.Fatalf("expected different arenas, but got the same instance")
+	}
+
+	// Return both arenas to the pool
+	manager.Put(arena1)
+	manager.Put(arena2)
+
+	// Get arenas again and ensure they are reset
+	arena1 = manager.Get()
+	arena2 = manager.Get()
+
+	_, ok1 := arena1.Allocate(512)
+	_, ok2 := arena2.Allocate(512)
+
+	if !ok1 || !ok2 {
+		t.Fatalf("expected allocations in both arenas to succeed, got ok1=%v, ok=%v", ok1, ok2)
 	}
 }

@@ -1,0 +1,25 @@
+mode: set
+github.com/ezrantn/catena/arena.go:15.46,19.20 1 1
+github.com/ezrantn/catena/arena.go:19.20,21.5 1 1
+github.com/ezrantn/catena/arena.go:26.38,28.2 1 1
+github.com/ezrantn/catena/arena.go:30.43,33.2 2 1
+github.com/ezrantn/catena/arena.go:35.32,40.2 1 1
+github.com/ezrantn/catena/arena.go:43.51,44.37 1 1
+github.com/ezrantn/catena/arena.go:44.37,47.3 1 1
+github.com/ezrantn/catena/arena.go:49.2,51.41 3 1
+github.com/ezrantn/catena/arena.go:54.25,56.2 1 1
+github.com/ezrantn/catena/json.go:7.63,12.16 4 1
+github.com/ezrantn/catena/json.go:12.16,14.3 1 0
+github.com/ezrantn/catena/json.go:16.2,17.9 2 1
+github.com/ezrantn/catena/json.go:17.9,19.3 1 0
+github.com/ezrantn/catena/json.go:21.2,22.20 2 1
+github.com/ezrantn/catena/json.go:25.70,27.2 1 1
+github.com/ezrantn/catena/proto.go:7.74,12.16 4 1
+github.com/ezrantn/catena/proto.go:12.16,14.3 1 0
+github.com/ezrantn/catena/proto.go:16.2,17.9 2 1
+github.com/ezrantn/catena/proto.go:17.9,19.3 1 0
+github.com/ezrantn/catena/proto.go:21.2,22.20 2 1
+github.com/ezrantn/catena/proto.go:25.81,27.2 1 1
+github.com/ezrantn/catena/serializer.go:11.46,15.20 1 1
+github.com/ezrantn/catena/serializer.go:15.20,17.5 1 1
+github.com/ezrantn/catena/serializer.go:20.20,22.5 1 1

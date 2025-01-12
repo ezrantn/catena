@@ -19,8 +19,9 @@ type User struct {
 func main() {
     user := &User{
         Name: "John",
-        Email: "john@mail.com"
+        Email: "john@mail.com",
     }
+    
     serializer := NewSerializer(1024 * 1024) // 1 MB memory
     _, err := serializer.SerializeToJSON(user)
 }
