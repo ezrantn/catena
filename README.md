@@ -84,7 +84,7 @@ if err != nil {
 
 ## Benchmark
 
-Here are the benchmark results comparing standard JSON serialization / deserialization against the custom serialization/deserialization implemented in the Catena library. The benchmark was run on an Intel i5-11400H CPU with 8GB RAM.
+Here are the benchmark results comparing standard JSON serialization/deserialization against the custom serialization/deserialization implemented in the Catena library. The benchmark was run on an Intel i5-11400H CPU with 8GB RAM.
 
 ```bash
 goarch: amd64
