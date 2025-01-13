@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 )
 
+// SerializeToJSON serializes an object into JSON and stores the result in the arena.
 func (s *Serializer) SerializeToJSON(obj any) ([]byte, error) {
 	buf := s.jsonPool.Get().([]byte)
 	defer s.jsonPool.Put(buf[:0])
@@ -22,6 +23,7 @@ func (s *Serializer) SerializeToJSON(obj any) ([]byte, error) {
 	return result, nil
 }
 
+// DeserializeFromJSON deserializes JSON data into an object.
 func (s *Serializer) DeserializeFromJSON(data []byte, obj any) error {
 	return json.Unmarshal(data, obj)
 }

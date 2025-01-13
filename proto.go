@@ -4,6 +4,7 @@ import (
 	"google.golang.org/protobuf/proto"
 )
 
+// SerializeToProto serializes an object into Protobuf and stores the result in the arena.
 func (s *Serializer) SerializeToProto(obj proto.Message) ([]byte, error) {
 	buf := s.protoPool.Get().([]byte)
 	defer s.protoPool.Put(buf[:0])
@@ -22,6 +23,7 @@ func (s *Serializer) SerializeToProto(obj proto.Message) ([]byte, error) {
 	return result, nil
 }
 
+// DeserializeFromProto deserializes Protobuf data into an object.
 func (s *Serializer) DeserializeFromProto(data []byte, obj proto.Message) error {
 	return proto.Unmarshal(data, obj)
 }
