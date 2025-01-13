@@ -38,9 +38,6 @@ data, err := serializer.SerializeToJSON(user)
 if err != nil {
    log.Fatalf("failed to serialize user to JSON: %v", err)
 }
-
-// Print the serialized JSON data
-fmt.Printf("Serialized JSON: %s\n", string(data))
 ```
 
 ```go
@@ -50,13 +47,7 @@ if err != nil {
    log.Fatalf("failed to deserialize JSON data: %v", err)
 }
 
-// Verify that the deserialized data matches the original data
-if deserializedUser.Name != user.Name || deserializedUser.Email != user.Email {
-   log.Fatalf("deserialization failed: expected %v, got %v", user, deserializedUser)
-}
-
-// Print the deserialized User object
-fmt.Printf("Deserialized User: %+v\n", deserializedUser)
+// Do something with deserializedUser
 ```
 
 ### Proto Serialization Example:
@@ -78,9 +69,6 @@ data, err := serializer.SerializeToProto(user)
 if err != nil {
    log.Fatalf("failed to serialize user to Proto: %v", err)
 }
-
-// Print the serialized Proto data (in bytes)
-fmt.Printf("Serialized Proto: %v\n", data)
 ```
 
 ```go
@@ -91,13 +79,7 @@ if err != nil {
    log.Fatalf("failed to deserialize Proto data: %v", err)
 }
 
-// Verify that the deserialized data matches the original data
-if deserializedUser.Name != user.Name || deserializedUser.Email != user.Email {
-   log.Fatalf("deserialization failed: expected %v, got %v", user, deserializedUser)
-}
-
-// Print the deserialized ProtoUser object
-fmt.Printf("Deserialized ProtoUser: %+v\n", deserializedUser)
+// Do something with deserializedUser
 ```
 
 ## Benchmark
